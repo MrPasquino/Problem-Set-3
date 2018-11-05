@@ -206,8 +206,8 @@ lowerbound.hdlngth = m - (upperbound.z * (sd / sqrt(n)))
 
 print(sprintf("%2.f%% confidence interval: (%2.2f, %2.2f)",
               confidence * 100,
-              upperbound.hdlngth,
-              lowerbound.hdlngth
+              lowerbound.hdlngth,
+              upperbound.hdlngth
 ))
 ```
 
@@ -225,4 +225,31 @@ Test your function by using it to construct a 95% confidence interval for the av
 
 In addition, use your function to construct 90% confidence intervals for the average total length and the average tail length for the possums in Victoria, New South Wales and Queensland; report the figures for the confidence intervals in appropriate units.
 
+```{r}
+make.CI = function(input.vector, percentage.conf) {
+    sd = sd(input.vector)
+    n = length(input.vector)
+    m = mean(input.vector)
+    
+    upperbound.z = qnorm(percentage.conf + ((1 - percentage.conf) / 2))
+    lowerbound.z = qnorm((1 - percentage.conf) / 2)
+    
+    upperbound = m + (upperbound.z * (sd / sqrt(n)))
+    lowerbound = m - (upperbound.z * (sd / sqrt(n)))
+    
+    return(c(lowerbound, upperbound))
+}
+```
 
+```{r}
+# Same as part E
+make.CI(possum$hdlngth, 0.95)
+
+# 90% CI for average total length
+make.CI(possum$totlngth, 0.90)
+
+# 90% CI for average tail length
+make.CI(possum$taill, 0.90)
+```
+
+Our function produces the same results as part E with a 95% confidence interval of 91.92 - 93.29mm average head length. The 90% confidence interval for average total lengths was 86.39 - 87.78mm. The 90% confidence interval for average tail length was 36.69 - 37.33mm.

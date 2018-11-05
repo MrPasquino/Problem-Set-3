@@ -4,4 +4,7 @@ unnamed-chunk-3	tapply	rep	length	possum	Pop	sex	sum
 unnamed-chunk-4	possum.percentageFemale	tapply	rep	length	possum	sex	sum	dbinom
 unnamed-chunk-5	possum.partA	sum	dbinom	possum.percentageFemale
 unnamed-chunk-6	sex.bin	as.numeric	possum	sex	set.seed	sim.possum	sapply	sample	T	sim.possum.mean	length	mean	x
-unnamed-chunk-7	histogram	possum	hdlngth	length	mean	sd
+unnamed-chunk-7	histogram	possum	hdlngth	hdlngth.m	mean	hdlngth.sd	sd	possum.2.sd	possum.3.sd	length
+unnamed-chunk-8	confidence	sd	possum	hdlngth	n	length	m	mean	upperbound.z	qnorm	lowerbound.z	upperbound.hdlngth	sqrt	lowerbound.hdlngth	print	sprintf
+unnamed-chunk-9	make.CI	sd	input.vector	n	length	m	mean	upperbound.z	qnorm	percentage.conf	lowerbound.z	upperbound	sqrt	lowerbound	return	c
+unnamed-chunk-10	make.CI	possum	hdlngth	totlngth	taill

@@ -4,4 +4,7 @@ unnamed-chunk-3
 unnamed-chunk-4	possum.percentageFemale
 unnamed-chunk-5	possum.partA
 unnamed-chunk-6	sex.bin	sim.possum	sim.possum.mean	.Random.seed
-unnamed-chunk-7	
+unnamed-chunk-7	hdlngth.m	hdlngth.sd	possum.2.sd	possum.3.sd
+unnamed-chunk-8	confidence	lowerbound.hdlngth	lowerbound.z	m	n	sd	upperbound.hdlngth	upperbound.z
+unnamed-chunk-9	make.CI
+unnamed-chunk-10	

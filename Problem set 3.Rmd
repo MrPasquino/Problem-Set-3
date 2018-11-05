@@ -1,13 +1,15 @@
 ---
 title: "SML 201 Problem Set 3"
-author: ""
-date: \today
+author: 'Stuart Duffield and Kevin Hou'
+date: "November 4, 2018"
 output:
-  pdf_document: 
+  html_document:
+    df_print: paged
+  pdf_document:
     fig_caption: yes
-fontsize: 10pt
 geometry: margin=1.5in
-editor_options: 
+fontsize: 10pt
+editor_options:
   chunk_output_type: console
 ---
 
@@ -15,7 +17,6 @@ editor_options:
 knitr::opts_chunk$set(fig.align="center", fig.height=4.5, fig.width=5, collapse=TRUE, comment="", prompt=FALSE, echo = TRUE, cache=TRUE, autodep=TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=63))
 options(width=63)
 ```
-
 
 
 **Problem set  is due by 11:59pm on Thursday November 8.** Please submit both a .Rmd and a .pdf file on Blackboard by the deadline **and** drop off a hard copy of the pdf file at 26 Prospect Avenue by 5pm of the **next day** of the due date. To look for the drop-off cabinet, after you enter the building turn to the left to enter the lounge area and the file cabinet is to your right with an open slot with the label "SML 201 Homework"; note that the building might be locked after 6pm and on the weekends.  You are also welcome to bring your PDF copy to any lecture **before** the deadline and I will drop off the copy for you.
@@ -79,16 +80,15 @@ Among the possums that were trapped in Victoria, what percentage of them are fem
 (tapply(rep(1, times = length(possum[possum$Pop=="other",]$sex)), possum[possum$Pop=="other",]$sex, sum)/length(possum[possum$Pop=="other",]$sex)*100)
 
 ```
-52.17391% of the possums trapped in Victoria are female.
 
-32.75862% of the possums trapped elsewhere are female.
+52.17391% of the possums trapped in Victoria are female. 32.75862% of the possums trapped elsewhere are female.
 
 
 ## Part c 
 
 If I randomly select a possum from the dataset, are the events that the possum is female and that the possum is from Victoria independent?  Use the numerical values that you found in Parts a and/or b to support your argument.  
 
-The events that the possum is female and that the possum is from Victoria are not independent, for the probability that the possum is female is not equal to the probability that the possum is female and from Victoria.
+The events that the possum is female and that the possum is from Victoria are not independent because the probability that the possum is female is not equal to the probability that the possum is female and from Victoria. Knowing that a possum is female will influence the probablility that the possume is from Victoria and vice versa.
 
 
 # Question 2 
@@ -100,16 +100,18 @@ The events that the possum is female and that the possum is from Victoria are no
 If I randomly select 20 possums with replacement from the dataset `possum`, what is the chance that at least half of the possums are females?
 
 ```{r}
-sum(dbinom(10:20,20,(tapply(rep(1, times = length(possum$sex)), possum$sex, sum)/length(possum$sex))[[1]]))
+possum.percentageFemale = tapply(rep(1, times = length(possum$sex)), possum$sex, sum)/length(possum$sex)
+sum(dbinom(10:20, 20, possum.percentageFemale[[1]]))
 ```
-There is a 28.56% chance that atleast half the possums are females
 
+There is a 28.56% chance that at least half the possums are females.
 
 ## Part b 
 
 If I repeat the procedure described in Part a 10 times (i.e., repeatedly select 10 samples with replacement, and for each sample I draw 20 possums with replacement from the original dataset), what is the chance that at least 7 of these 10 samples have at least 50% females?
 ```{r}
-sum(dbinom(7:10,10,sum(dbinom(10:20,20,(tapply(rep(1, times = length(possum$sex)), possum$sex, sum)/length(possum$sex))[[1]]))))
+possum.partA = sum(dbinom(10:20, 20, possum.percentageFemale[[1]]))
+sum(dbinom(7:10, 10, possum.partA))
 ```
 
 0.789% chance that at least 7 of these 10 samples have at least 50% females
@@ -159,12 +161,18 @@ Make a histogram for the possum head length measurements in the `possum` dataset
 ```{r}
 histogram(possum$hdlngth)
 
-length(possum$hdlngth[possum$hdlngth <= mean(possum$hdlngth) + 2*sd(possum$hdlngth) & possum$hdlngth >= mean(possum$hdlngth) - 2*sd(possum$hdlngth)])/length(possum$hdlngth)
+# Statistics
+hdlngth.m = mean(possum$hdlngth)
+hdlngth.sd = sd(possum$hdlngth)
 
-length(possum$hdlngth[possum$hdlngth <= mean(possum$hdlngth) + 3*sd(possum$hdlngth) & possum$hdlngth >= mean(possum$hdlngth) - 3*sd(possum$hdlngth)])/length(possum$hdlngth)
+possum.2.sd = possum$hdlngth[possum$hdlngth <= hdlngth.m + 2 * hdlngth.sd & possum$hdlngth >= hdlngth.m - 2 * hdlngth.sd]
+possum.3.sd = possum$hdlngth[possum$hdlngth <= hdlngth.m + 3 * hdlngth.sd & possum$hdlngth >= hdlngth.m - 3 * hdlngth.sd]
+
+length(possum.2.sd)/length(possum$hdlngth)
+length(possum.3.sd)/length(possum$hdlngth)
 ```
 
-
+The percentage of data points that fall within 2 and 3 SD's of the head length average is 93.27% and 100%, respectively.
 
 ## Part d 
 
@@ -177,12 +185,31 @@ What distribution do you think will be a good approximation for the distribution
 
 Please provide the name of the distribution along with the parameter(s) of the distribution.  (You might want to make some plots of the data to look at but you do not need to submit the plots for this part.)
 
+The distribution is a standard normal distribution. This is a normal distribution with parameters $\mu = 0$ and $\sigma = 1$.
 
 ## Part e 
 
 Construct a 95% confidence interval to predict the average head length of all the mountain brushtail possums in Victoria, New South Wales and Queensland.
 
+```{r}
+# 95% confidence interval
+confidence = 0.95
+sd = sd(possum$hdlngth)
+n = length(possum$hdlngth)
+m = mean(possum$hdlngth)
 
+upperbound.z = qnorm(confidence + ((1 - confidence) / 2))
+lowerbound.z = qnorm((1 - confidence) / 2)
+
+upperbound.hdlngth = m + (upperbound.z * (sd / sqrt(n)))
+lowerbound.hdlngth = m - (upperbound.z * (sd / sqrt(n)))
+
+print(sprintf("%2.f%% confidence interval: (%2.2f, %2.2f)",
+              confidence * 100,
+              upperbound.hdlngth,
+              lowerbound.hdlngth
+))
+```
 
 
 ## Part f 

@@ -3,10 +3,10 @@ title: "SML 201 Problem Set 3"
 author: 'Stuart Duffield and Kevin Hou'
 date: "November 4, 2018"
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     fig_caption: yes
+  html_document:
+    df_print: paged
 geometry: margin=1.5in
 fontsize: 10pt
 editor_options:
